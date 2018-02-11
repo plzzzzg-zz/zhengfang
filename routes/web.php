@@ -14,14 +14,18 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/courses/auth','CoursesController@yiban_auth');
 Route::get('/api/courses/{id?}','CoursesController@courses');
 Route::get('/courses/index','CoursesController@index');
 Route::get('/courses/login','CoursesController@login');
 Route::post('/courses/login','CoursesController@login_post');
 Route::get('/courses/{id?}','CoursesController@show');
 
-
+// Route::get('/data/test','CoursesController@dataTest');
+Route::get('/data/test','FileController@FileList');
+Route::get('/group/test','FileController@getGroups');
+Route::get('/data/files','FileController@getFiles');
+Route::get('/blank','FileController@blank');
+Route::get('/data/iframe','FileController@iframe');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

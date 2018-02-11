@@ -231,7 +231,7 @@ return [
     ],
 
     /*
-     * 当前学期的第一天
+     * 当前学期的第一天(星期一)
      */
-    'FirstDayOfThisSemester'=>'2017-7-25',
+    'FirstDayOfThisSemester'=>'2017-9-11',
 ];

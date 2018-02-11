@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Course;
-use App\User;
 use Carbon\Carbon;
 use HtmlParser\ParserDom;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -76,7 +73,7 @@ class CoursesController extends BaseController
         $data = $request->session()->get('_token');
         $cookie_file = storage_path() . '\\app\\public\\cookies\\' . $data . '.cookie';
 //        var_dump($cookie_file);
-        $captcha_url = 'http://202.116.163.61/CheckCode.aspx';
+        $captcha_url = 'http://202.116.160.170/CheckCode.aspx';
         $captcha = '/public/captcha/' . $data . ".jpg";
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie_file);  //保存cookie
@@ -100,8 +97,8 @@ class CoursesController extends BaseController
         $this->getCaptcha($request);
         $data = $request->session()->get('_token');
         $captcha = 'captcha/' . $data . ".jpg";
-        $captcha_path = Storage::url($captcha);
-//        var_dump($captcha_path);
+        $captcha_path = 'localhost:8000'.Storage::url($captcha);
+       // var_dump($captcha_path);
         return view('login', compact('captcha_path'));
     }
 
@@ -122,9 +119,9 @@ class CoursesController extends BaseController
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);  //不自动输出数据，要echo才行
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);  //重要，抓取跳转后数据
         curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
-        curl_setopt($ch, CURLOPT_REFERER, 'http://202.116.163.61/default2.aspx');  //重要，302跳转需要referer，可以在Request Headers找到
+        curl_setopt($ch, CURLOPT_REFERER, 'http://202.116.160.170/default2.aspx');  //重要，302跳转需要referer，可以在Request Headers找到
 //        if (session()->has('student_id')){
-//            curl_setopt($ch, CURLOPT_REFERER, 'http://202.116.163.61/xs_main.aspx?xh='.\session('student_id').'&xm='.\session('xm').'&gnmkdm='.\session('gnmkdm'));
+//            curl_setopt($ch, CURLOPT_REFERER, 'http://202.116.160.170/xs_main.aspx?xh='.\session('student_id').'&xm='.\session('xm').'&gnmkdm='.\session('gnmkdm'));
 //        }
         if (!is_null($this->courses_url)) {
             curl_setopt($ch, CURLOPT_REFERER, $this->courses_url);
@@ -144,7 +141,7 @@ class CoursesController extends BaseController
         $data = $request->session()->get('_token');
         $cookie_file = storage_path() . '\\app\\public\\cookies\\' . $data . '.cookie';
         $input = $request->all();
-        $url = 'http://202.116.163.61/default2.aspx';
+        $url = 'http://202.116.160.170/default2.aspx';
         $captcha = $input['code'];
         $xh = $input['student_id'];
         $pw = $input['password'];
@@ -168,8 +165,8 @@ class CoursesController extends BaseController
 //        echo $encode;
         if (strpos($string, '欢迎您')) {
 //            echo '登陆成功';
-//            $courses_url = 'http://202.116.163.61/xskbcx.aspx?xh=201525010107&xm=%B9%F9%C5%E6%C2%D7';
-//            $courses_url = 'http://202.116.163.61/xskbcx.aspx?xh=201525010107&xm=%B9%F9%C5%E6%C2%D7';
+//            $courses_url = 'http://202.116.160.170/xskbcx.aspx?xh=201525010107&xm=%B9%F9%C5%E6%C2%D7';
+//            $courses_url = 'http://202.116.160.170/xskbcx.aspx?xh=201525010107&xm=%B9%F9%C5%E6%C2%D7';
 //            $data = $this->post($courses_url,$cookie_file,'');
 //            return $data;
 //            Cookie::queue(Cookie::make('student_id',$xh));
@@ -179,7 +176,7 @@ class CoursesController extends BaseController
 //            dd(Cookie::get('student_id'));
             $this->html_dom->load($string);
             $info = $this->html_dom->find('a[target=zhuti]', 8)->getAttr('href');
-            $info = 'http://202.116.163.61/' . $info;
+            $info = 'http://202.116.160.170/' . $info;
             $info = explode('=', $info);
             $info[2] = mb_convert_encoding(substr($info[2], 0, -7), "gb2312", "UTF-8");
             $info[2] = urlencode($info[2]) . '&gnmkdm';
@@ -200,35 +197,7 @@ class CoursesController extends BaseController
             $this->updateCourses($this->getCourses($string, $request));
             //登陆成功重定向
 //            return $this->show($request, $xh);
-
-            $student = User::where('student_id',$input['student_id'])->first();
-            //存在该学生记录,更新记录
-            if ($student !== null){
-                if (\session('platform')=='yiban'){
-                    $student->yb_userid = \session('yb_userid');
-                }elseif(\session('platform')=='wechat'){
-                    $student->wechat_id = \session('wechat_id');
-                }
-                if (isset($input['remember'])) {
-                    $student->zhengfang_password = $input['password'];
-                }
-                $student->save();
-            }else{
-                $user = new User();
-                $user->student_id = $input['student_id'];
-                $user->name = $input['student_id'];
-                $user->password = $input['student_id'];
-                if (\session('platform')=='yiban'){
-                    $user->yb_userid = \session('yb_userid');
-                }else{
-                    $user->wechat_id = \session('wechat_id');
-                }
-                if (isset($input['remember'])) {
-                    $user->zhengfang_password = $input['password'];
-                }
-                $user->save();
-            }
-            return redirect(url('courses/' . $xh));
+            return redirect(url('courses/'.$xh));
         } else {
             if (strpos($string, '密码')) {
                 return redirect()->back()->withInput()->withErrors(['password' => '密码错误！']);
@@ -402,7 +371,7 @@ class CoursesController extends BaseController
 //        编码
         $name = mb_convert_encoding($name, "gb2312", "UTF-8");
         $name = urlencode($name);
-        $courses_url = 'http://202.116.163.61/xskbcx.aspx?xh=' . $student_id . '&xm=' . $name;
+        $courses_url = 'http://202.116.160.170/xskbcx.aspx?xh=' . $student_id . '&xm=' . $name;
         $post_data = array(
             '__VIEWSTATE' => $this->viewState,
             '__EVENTTARGET' => 'xqd',
@@ -607,20 +576,49 @@ class CoursesController extends BaseController
 
     function show(Request $request, $xh = null)
     {
-        //var_dump($user);
-//        if (is_null($xh)) {
-//            if ($request->session()->has('student_id')) {
-//                $xh = \session('student_id');
-//            } else {
-//                return redirect(url('/courses/login'));
-//            }
-//        }
-//        return redirect(url('/courses', compact('xh')));
+        if (is_null($xh)) {
+            if ($request->session()->has('student_id')) {
+//                $xh = Cookie::get('student_id');
+                $xh = \session('student_id');
+               $xh='201525010107';
+            } else {
+                // return $this->login($request);
+                $xh='201525010107';
+            }
+        }
+//        return redirect(url('/courses',compact('xh')));
         return \view('courses',compact('xh'));
 
     }
 
-    function yiban_auth()
+    public function dataTest()
+    {
+        $this->auth();
+        $access_token = $this->access_token;
+        // $fileListJsonStr = $this->sendRequest("https://openapi.yiban.cn/data/download?access_token={$access_token}");
+        // $fileList = json_decode($fileListJsonStr); //it's a json object
+        $next_page=1;
+        $files=array();
+        // var_dump($files);
+        while($next_page!=false){
+            $fileListJsonStr = $this->sendRequest("https://openapi.yiban.cn/data/download?access_token={$access_token}&count=30&page=".$next_page);
+            $fileList = json_decode($fileListJsonStr,true);
+            $next_page=$fileList->info->next_page;
+            // var_dump($next_page);
+             // var_dump(json_encode($fileList));
+            $files=(array_merge($files,$fileList));
+            // var_dump($fileList);
+            // var_dump($files);
+        }
+
+//        var_dump($userInfo->info->yb_userid);
+//        json_encode($userInfo,JSON_UNESCAPED_UNICODE);
+        //$yb_userid = $file->info->yb_userid;
+        // var_dump( $files);
+         return $files;
+    }
+
+    public function auth()
     {
         ini_set("display_errors", "On");
         error_reporting(0);
@@ -634,11 +632,9 @@ class CoursesController extends BaseController
         if (!function_exists('mcrypt_decrypt')) {
             throw new Exception('YiBan needs the mcrypt PHP extension.');
         }
-
-//以下三个变量内容需换成本应用的
-        $APPID = "cd79f90c4316d58d";   //在open.yiban.cn管理中心的AppID
-        $APPSECRET = "eca282f7c92e6cbd18b1a8bf50dbe2bc"; //在open.yiban.cn管理中心的AppSecret
-        $CALLBACK = "http://f.yiban.cn/iapp134027";  //在open.yiban.cn管理中心的oauth2.0回调地址
+        $APPID = "c4d7d4b56df6392d";   //在open.yiban.cn管理中心的AppID
+        $APPSECRET = "61f04f3295a1d625c3c0771b66e827be"; //在open.yiban.cn管理中心的AppSecret
+        $CALLBACK = "http://f.yiban.cn/iapp166735";  //在open.yiban.cn管理中心的oauth2.0回调地址
 
         if (isset($_GET["code"])) {   //用户授权后跳转回来会带上code参数，此处code非access_token，需调用接口转化。
             $getTokenApiUrl = "https://oauth.yiban.cn/token/info?code=" . $_GET['code'] . "&client_id={$APPID}&client_secret={$APPSECRET}&redirect_uri={$CALLBACK}";
@@ -663,22 +659,7 @@ class CoursesController extends BaseController
             }
             $access_token = $postArr['visit_oauth']['access_token'];
         }
-        $userInfoJsonStr = $this->sendRequest("https://openapi.yiban.cn/user/me?access_token={$access_token}");
-        $userInfo = json_decode($userInfoJsonStr);
-//        var_dump($userInfo->info->yb_userid);
-//        json_encode($userInfo,JSON_UNESCAPED_UNICODE);
-        $yb_userid = $userInfo->info->yb_userid;
-        \session(['yb_userid' => $yb_userid,'platform'=>'yiban']);
-        try {
-            $user = User::where('yb_userid', $yb_userid)->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            return redirect(url('/courses/login'));
-        };
-        return $this->show(\request(),$user->student_id);
-//        $userInfoJsonStr = $this->sendRequest("https://openapi.yiban.cn/user/me?access_token={$access_token}");
-//        $userInfo = json_decode($userInfoJsonStr);
-////        var_dump($userInfo);
-//        return  json_encode($userInfo,JSON_UNESCAPED_UNICODE);
+        $this->access_token =  $access_token;
     }
 
     function sendRequest($uri)
@@ -696,6 +677,9 @@ class CoursesController extends BaseController
         curl_setopt($ch, CURLOPT_HTTPHEADER, array());
         curl_setopt($ch, CURLINFO_HEADER_OUT, true);
         $response = curl_exec($ch);
+        if ($response == false){
+            echo curl_error($ch);
+        }
         return $response;
     }
 }

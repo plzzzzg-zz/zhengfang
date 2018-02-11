@@ -11,18 +11,21 @@
 {{--<script type="text/javaScript"  src="{{ asset('js/axios.js') }}"></script>--}}
 {{--<script src="https://unpkg.com/axios/dist/axios.min.js"></script>--}}
 <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <title>课表</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="{{asset('css/simple-sidebar.css')}}">
     <style>
-        td {
+        td{
             vertical-align: middle !important;
-            height: 70px;
+            height: 50px;
             text-align: center;
             font-size: 10px;
             border-top: 0 !important;
         }
-
+        #toggle_noon{
+            height: 20px !important;
+        }
         .hasClass {
             background-color: #475669;
             color: white;
@@ -83,6 +86,12 @@
         .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
             border: 1px #324057;
         }
+        .hidden{
+            display: none;
+        }
+        .show{
+            display: block;
+        }
     </style>
 <body>
 
@@ -92,7 +101,30 @@
     <div id="sidebar-wrapper" style="right: 0;color: white;">
         <ul class="sidebar-nav">
             <li class="sidebar-brand" @click="showWeeks">
-                当前：@{{ week }}
+            	<form class="form-inline">
+            		<div class="form-group">
+            			<label class="sr-only" for="week_select">当前:</label>
+            			<div class="input-group">
+            				<div class="input-group-addon">
+            					当前:
+            				</div>
+            				<select class="form-control" name="week_select" id="week_select" @change="changeWEEK()">
+                	<option value="@{{week}}">@{{week}}</option>
+                	<option value="1">1</option>}
+                	<option value="2">2</option>}
+                	<option value="3">3</option>}
+                	<option value="4">4</option>}
+                	<option value="5">5</option>}
+                	<option value="6">6</option>}
+                	<option value="7">7</option>}
+                	<option value="8">8</option>}
+                	<option value="9">9</option>}
+                </select>
+            			</div>
+            		</div>
+            	</form>
+                <!--当前： @{{ week }} 
+                
                 <span class="glyphicon glyphicon-triangle-bottom"></span>
             </li>
             <li class="divider"></li>
@@ -121,6 +153,7 @@
                     <li @click="changeWeek(21)">第21周</li>
                 </ul>
             </li>
+            -->
             <li>
                 <a href="{{url('/courses/login')}}">更新课表</a>
             </li>
@@ -159,6 +192,7 @@
                 </thead>
             </table>
         </div>
+        
         <div class="container" @click="hideSideBar" id="c">
             <table class="table table-responsive" style="margin-top: 37px;margin-bottom: 0!important; border: 0;">
                 {{--@{{ thisWeek }}--}}
@@ -323,7 +357,10 @@
                     <td v-if="!courses['703']['hasClass']" style="border-right: 0;"></td>
                 </tr>
                 {{--row5--}}
-                <tr style="border-top-color: #133d55;">
+                <tr @click='toggle_noon' id="toggle_noon">
+                    <td colspan="8" style="height: 20px; padding: 1px !important">
+                    \/显示中午\/                </tr>
+                <tr style="border-top-color: #133d55; display: none" id="row5">
                     <td class="text-center" scope="row" style="width: 33px
 ;border-right:0;">5
                     </td>
@@ -391,7 +428,7 @@
                     </td>
                     <td v-else style="border-right: 0;"></td>
                 </tr>
-                <tr style="border-bottom-color: #133d55;">
+                <tr style="border-bottom-color: #133d55; display: none;" id="row6">
                     <td scope="row">6</td>
                     <td v-if="!courses['105']['hasClass']"></td>
                     <td v-if="!courses['205']['hasClass']"></td>
@@ -679,18 +716,19 @@
 <script>
 
     $(document).ready(function () {
+
     });
-    let week = {!! $week !!};
-    let student_id = {!! $xh !!};
-    let url = '/api/courses/' + student_id;
-    let vm = new Vue({
+    var week = {!! $week !!};
+    var student_id = {!! $xh !!};
+    var url = '/api/courses/' + student_id;
+    var vm = new Vue({
         el: '#wrapper',
         data: {
             courses: [],
             week: week,
         },
         beforeCreate: function () {
-            let self = this;
+            var self = this;
             axios.get(url)
                 .then((response) => {
                     /**
@@ -705,9 +743,9 @@
                      * 2. Use ECS6 arrow function,箭头方法可以与父方法共享变量
                      */
                     this.courses = response.data;
-                    for (let i = 100; i <= 700; i += 100) {
-                        for (let j = 1; j <= 11; j += 2) {
-                            let c = i + j;
+                    for (var i = 100; i <= 700; i += 100) {
+                        for (var j = 1; j <= 11; j += 2) {
+                            var c = i + j;
                             if (typeof(self.courses[c]['name']) === "string") {
                                 if (self.week >= self.courses[c]['week_begin'] &&
                                     self.courses[c]['week_end'] >= self.week) {
@@ -726,14 +764,14 @@
                 });
         },
         created: function () {
-            let self = this;
+            var self = this;
         },
         methods: {
             changeCourses: function () {
-                let self = this;
-                for (let i = 100; i <= 700; i += 100) {
-                    for (let j = 1; j <= 11; j += 2) {
-                        let c = i + j;
+                var self = this;
+                for (var i = 100; i <= 700; i += 100) {
+                    for (var j = 1; j <= 11; j += 2) {
+                        var c = i + j;
                         if (typeof(self.courses[c]['name']) === "string") {
                             if (self.week >= self.courses[c]['week_begin'] &&
                                 self.courses[c]['week_end'] >= self.week) {
@@ -750,6 +788,9 @@
             changeWeek(week) {
                 vm.week = week;
             },
+            changeWEEK(){
+            	vm.week=$('#week_select').val();
+            },
             t(e) {
                 e.preventDefault();
                 $("#wrapper").toggleClass("toggled");
@@ -763,6 +804,11 @@
                 if ($("#wrapper").hasClass('toggled')) {
                     $("#wrapper").removeClass("toggled");
                 }
+            },
+            toggle_noon(e){
+                e.preventDefault();
+                $('#row5').slideToggle();
+                $('#row6').slideToggle();
             }
         }
         ,
