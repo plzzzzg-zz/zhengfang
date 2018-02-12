@@ -23,7 +23,7 @@ class GradeController extends Controller
      * 展示成绩
      */
     function showGrades(Request $request){
-        $data = $this->getGrades($request);
+//        $data = $this->getGrades($request);
         return view('grade',compact('data'));
     }
 

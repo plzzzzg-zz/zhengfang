@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+    {{--<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>--}}
+    <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
     <title>成绩查询</title>
 </head>
 <body>
@@ -62,33 +63,33 @@
     var v = new Vue({
         el: '#container',
         data: {
-            {!!$data['courses']!!}
-            // courses:[
-            // 	{
-            // 		name:'course1',
-            // 		credit:1.0,
-            // 		point:4.0,
-            // 		grade:99
-            // 	},
-            // 	{
-            // 		name:'course2',
-            // 		credit:4.0,
-            // 		point:1.0,
-            // 		grade:99
-            // 	},
-            // 	{
-            // 		name:'course3',
-            // 		credit:4.0,
-            // 		point:4.0,
-            // 		grade:99
-            // 	},
-            // 	{
-            // 		name:'course4',
-            // 		credit:4.0,
-            // 		point:4.5,
-            // 		grade:99
-            // 	}
-            // ]
+            {{--courses:{!!$data['courses']!!}--}}
+             courses:[
+             	{
+             		name:'course1',
+             		credit:1.0,
+             		point:4.0,
+             		grade:99
+             	},
+             	{
+             		name:'course2',
+             		credit:4.0,
+             		point:1.0,
+             		grade:99
+             	},
+             	{
+             		name:'course3',
+             		credit:4.0,
+             		point:4.0,
+             		grade:99
+             	},
+             	{
+             		name:'course4',
+             		credit:4.0,
+             		point:4.5,
+             		grade:99
+             	}
+             ]
         },
         methods: {},
         computed: {
