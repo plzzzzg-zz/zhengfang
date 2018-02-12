@@ -70,7 +70,7 @@ class GradeController extends Controller
         $this->html_dom->load($html);
         $trs = $this->html_dom->find('table[class=datelist] tbody',0)->find('tr');
         $data = array();
-        $course = array();
+        $courses = array();
         foreach ($trs as $tr){
             $tds = $tr->find("td");
             if ($tds[3]->getPlainText() == '课程名称') continue;
