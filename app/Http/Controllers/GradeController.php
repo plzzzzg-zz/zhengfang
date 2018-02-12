@@ -101,7 +101,7 @@ class GradeController extends Controller
         $captcha = 'captcha/' . $data . ".jpg";
 //        $captcha_path = Storage::url($captcha);
         $captcha_path = asset(Storage::url($captcha));
-        var_dump($captcha_path);
+//        var_dump($captcha_path);
         $func = "grade";
         return view('login_zhengfang', compact('captcha_path','func'));
     }
