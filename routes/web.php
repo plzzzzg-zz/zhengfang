@@ -28,4 +28,10 @@ Route::get('/blank','FileController@blank');
 Route::get('/data/iframe','FileController@iframe');
 Auth::routes();
 
+
+Route::get('/grade/login','GradeController@login');
+Route::post('/grade/login','GradeController@login_post');
+Route::get('/grade/test','GradeController@analyzeGrades');
+Route::get('/grade/{id?}','GradeController@getGrades');
+
 Route::get('/home', 'HomeController@index')->name('home');

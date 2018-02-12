@@ -97,7 +97,7 @@ class CoursesController extends BaseController
         $this->getCaptcha($request);
         $data = $request->session()->get('_token');
         $captcha = 'captcha/' . $data . ".jpg";
-        $captcha_path = 'localhost:8000'.Storage::url($captcha);
+        $captcha_path = ''.Storage::url($captcha);
        // var_dump($captcha_path);
         return view('login', compact('captcha_path'));
     }
@@ -212,153 +212,6 @@ class CoursesController extends BaseController
 
     public function getCourses(String $html, Request $request)
     {
-//        $html = '<html class="main_html"><head>
-//		<title>正方教务管理系统</title>
-//<!--?xml version="1.0" encoding="utf-8" ?-->
-//		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
-//		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-//		<meta http-equiv="Content-Language" content="utf-8">
-//		<meta content="all" name="robots">
-//		<meta name="author" content="作者信息">
-//		<meta name="Copyright" content="版权信息">
-//		<meta name="description" content="站点介绍">
-//		<meta name="keywords" content="站点关键词">
-//		<link rel="icon" href="style/base/favicon.ico" type="image/x-icon">
-//		<link rel="shortcut icon" href="style/base/favicon.ico" type="image/x-icon">
-//		<link rel="stylesheet" href="style/base/jw.css" type="text/css" media="all">
-//		<link rel="stylesheet" href="style/standard/jw.css" type="text/css" media="all">
-//
-//		<script language="javascript" src="style/js/iframeautoheight.js"></script>
-//<!--[if IE 6]>
-//<script src="style/js/ie6comm.js"></script>
-//<script>
-//DD_belatedPNG.fix(\'img\');
-//</script>
-//<![endif]-->
-//	<script src="js/xtwh.js" language="javascript"></script>
-//
-//<script type="text/javascript">
-//// initialise plugins
-//			var a=b=c=\'\';
-//			public function GetMc(text)
-//			{
-//			document.getElementById(\'dqwz\').innerText=text;
-//			var url=window.frames["zhuti"].location.href;
-//			var p=url.substring(url.lastIndexOf(\'/\')+1,url.lastIndexOf(\'aspx\')+4);
-//			a=c;
-//			c=p;
-//			if(b!=text)
-//			{
-//				if(a!=p)
-//				{
-//				document.getElementById(\'lj\').innerText=b;
-//				}
-//				b=text;
-//			}
-//			}
-//</script>
-//
-//
-//	<script charset="utf-8" src="chrome-extension://jgphnjokjhjlcnnajmfjlacjnjkhleah/js/btype.js"></script><style type="text/css">
-//:root .footer > #box[style="width:100%;height:100%;position:fixed;top:0"]
-//{ display: none !important; }</style></head>
-//	<body class="mainbody">
-//		<div id="bodyDiv">
-//			<div id="headDiv">
-//				<!--顶部-->
-//				<div class="head">
-//					<!--学校图标及皮肤说明图标-->
-//					<div class="logo">
-//						<h2><img src="logo/logo_school.png"></h2>
-//						<h3><img src="logo/logo_jw.png"></h3>
-//					</div>
-//					<!--学校图标及皮肤说明图标-->
-//					<!--登录信息及工具-->
-//					<form name="Form1" method="post" action="xs_main.aspx?xh=201525010107" id="Form1">
-//<input type="hidden" name="__EVENTTARGET" value="">
-//<input type="hidden" name="__EVENTARGUMENT" value="">
-//<input type="hidden" name="__VIEWSTATE" value="dDwxMjg4MjkxNjE4Ozs+v2/dYYZfCxgD5+j2kJF3qyUhNFY=">
-//
-//<script language="javascript" type="text/javascript">
-//<!--
-//	public function __doPostBack(eventTarget, eventArgument) {
-//		var theform;
-//		if (window.navigator.appName.toLowerCase().indexOf("microsoft") > -1) {
-//			theform = document.Form1;
-//		}
-//		else {
-//			theform = document.forms["Form1"];
-//		}
-//		theform.__EVENTTARGET.value = eventTarget.split("$").join(":");
-//		theform.__EVENTARGUMENT.value = eventArgument;
-//		theform.submit();
-//	}
-//// -->
-//</script>
-//
-//
-//
-//						<div class="info">
-//							<ul>
-//								<li>
-//									<span id="Label3">欢迎您：</span>
-//									<em>
-//										<span id="xhxm">郭沛伦同学</span></em>
-//
-//								</li><li>
-//									<a id="likTc" href="javascript:__doPostBack(\'likTc\',\'\')">退出</a>
-//								</li>
-//							</ul>
-//						</div>
-//					</form>
-//					<!--登录信息及工具-->
-//				</div>
-//				<!--顶部-->
-//				<!--导航-->
-//				<!-- 主菜单Start-->
-//				 <ul class="nav"><li class="top"><a class="top_link" href="xs_main.aspx?xh=201525010107"><span class="">返回首页</span></a></li><li class="top"><a href="#" class="top_link"><span class="down"> 网上选课</span><!--[if gte IE 7]><!--></a><!--<![endif]--><!--[if lte IE 6]><table><tr><td><![endif]--><ul class="sub"><!--[if lte IE 6]><iframe class=\'navbug\'></iframe><![endif]--><li><a href="xsxk.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121101" target="zhuti" onclick="GetMc(\'学生选课\');">学生选课</a></li><li><a href="xf_xsqxxxk.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121104" target="zhuti" onclick="GetMc(\'公共选修课/A系列选修课\');">公共选修课/A系列选修课</a></li><li><a href="xf_xsyxxxk.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121109" target="zhuti" onclick="GetMc(\'学分制课程选课（2016级部分学院）\');">学分制课程选课（2016级部分学院）</a></li></ul><!--[if lte IE 6]></td></tr></table></a><![endif]--></li>  <li class="top"><a href="#a" class="top_link"><span class="down"> 活动报名</span><!--[if gte IE 7]><!--></a><!--<![endif]--><!--[if lte IE 6]><table><tr><td><![endif]--><ul class="sub"><!--[if lte IE 6]><iframe class=\'navbug\'></iframe><![endif]--></ul><!--[if lte IE 6]></td></tr></table></a><![endif]--></li>  <li class="top"><a href="#a" class="top_link"><span class="down"> 教学质量评价</span><!--[if gte IE 7]><!--></a><!--<![endif]--><!--[if lte IE 6]><table><tr><td><![endif]--><ul class="sub"><!--[if lte IE 6]><iframe class=\'navbug\'></iframe><![endif]--></ul><!--[if lte IE 6]></td></tr></table></a><![endif]--></li>  <li class="top"><a href="#a" class="top_link"><span class="down"> 信息维护</span><!--[if gte IE 7]><!--></a><!--<![endif]--><!--[if lte IE 6]><table><tr><td><![endif]--><ul class="sub"><!--[if lte IE 6]><iframe class=\'navbug\'></iframe><![endif]--><li><a href="xsgrxx.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121501" target="zhuti" onclick="GetMc(\'个人信息\');">个人信息</a></li><li><a href="mmxg.aspx?xh=201525010107&amp;gnmkdm=N121502" target="zhuti" onclick="GetMc(\'密码修改\');">密码修改</a></li><li><a href="xszzy.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121503" target="zhuti" onclick="GetMc(\'转专业申请\');">转专业申请</a></li><li><a href="xsezybm.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121506" target="zhuti" onclick="GetMc(\'第二专业报名表\');">第二专业报名表</a></li></ul><!--[if lte IE 6]></td></tr></table></a><![endif]--></li>  <li class="top"><a href="#a" class="top_link"><span class="down"> 信息查询</span><!--[if gte IE 7]><!--></a><!--<![endif]--><!--[if lte IE 6]><table><tr><td><![endif]--><ul class="sub"><!--[if lte IE 6]><iframe class=\'navbug\'></iframe><![endif]--><li><a href="tjkbcx.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121601" target="zhuti" onclick="GetMc(\'专业推荐课表查询\');">专业推荐课表查询</a></li><li><a href="xskbcx.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121603" target="zhuti" onclick="GetMc(\'学生个人课表\');">学生个人课表</a></li><li><a href="xskscx.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121604" target="zhuti" onclick="GetMc(\'学生考试查询\');">学生考试查询</a></li><li><a href="xscjcx.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121605" target="zhuti" onclick="GetMc(\'成绩查询\');">成绩查询</a></li><li><a href="pyjh.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121607" target="zhuti" onclick="GetMc(\'培养计划\');">培养计划</a></li><li><a href="xxjsjy.aspx?xh=201525010107&amp;xm=郭沛伦&amp;gnmkdm=N121611" target="zhuti" onclick="GetMc(\'教室查询\');">教室查询</a></li></ul><!--[if lte IE 6]></td></tr></table></a><![endif]--></li>  <li class="top"><a href="#a" class="top_link"><span class="down"> 公用信息</span><!--[if gte IE 7]><!--></a><!--<![endif]--><!--[if lte IE 6]><table><tr><td><![endif]--><ul class="sub"><!--[if lte IE 6]><iframe class=\'navbug\'></iframe><![endif]--></ul><!--[if lte IE 6]></td></tr></table></a><![endif]--></li></ul>
-//				<!--选项卡-->
-//				<div class="tab">
-//					<ul style="DISPLAY:none">
-//						<li>
-//						</li>
-//					</ul>
-//					<p class="location">
-//						<em>当前位置 --
-//							<span id="dqwz">通知公告</span><span id="lj" style="DISPLAY:none"></span>
-//						</em>
-//						<span id="xsrs"><font color="Red"></font></span>
-//					</p>
-//				</div>
-//				<!--选项卡-->
-//				<!--导航-->
-//			</div>
-//			<div id="mainDiv">
-//				<div id="leftDiv">
-//				</div>
-//				<div id="rightDiv">
-//					<div>
-//						<iframe id="iframeautoheight" class="rightcontiframe" name="zhuti" allowtransparency="" src="content.aspx" scrolling="no" frameborder="0" marginwidth="0" marginheight="0" onload="javascript:dyniframesize(\'iframeautoheight\');" style="display: block;" height="420" width="1042" __idm_frm__="111"></iframe>
-//					</div>
-//				</div>
-//			</div>
-//			<div id="footerDiv">
-//				<input name="hidNJ" id="hidNJ" type="hidden"><input name="hidXY" id="hidXY" type="hidden">
-//				<input name="hidZYDM" id="hidZYDM" type="hidden">
-//				<!--底部-->
-//				<div class="footer">
-//					<span>©1999-2012 <a href="http://www.zfsoft.com" target="_blank">正方软件股份有限公司</a>
-//                    <span>版权所有</span>&nbsp;&nbsp;联系电话：0571-89902828</span>
-//				</div>
-//				<input id="txtTimeStamp" style="DISPLAY:none">
-//
-//				<!--底部-->
-//			</div>
-//		</div>
-//
-//
-//
-//</body><div></div></html>';
 //        var_dump($html);
         $this->html_dom->load($html);
         $data = $request->session()->get('_token');
@@ -403,7 +256,7 @@ class CoursesController extends BaseController
             foreach ($td_array as $td) {
                 if (strlen(trim($td->getPlainText())) != 2) {
                     /*
-                     * todo
+                     *
                      * 课表的两种情况分析
                      * 1：乒乓球4<br>周二第3,4节{第1-16周}<br>姚业戴<br>东区1栋乒乓室
                      * 2：计算机组成原理<br>周二第1,2节{第2-6周|双周}<br>万军洲(万军洲)<br>4205<br><br>计算机组成原理<br>周二第1,2节{第10-16周|双周}<br>万军洲(万军洲)<br>4205
