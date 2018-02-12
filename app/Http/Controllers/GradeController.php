@@ -23,7 +23,14 @@ class GradeController extends Controller
      * 展示成绩
      */
     function showGrades(Request $request){
-//        $data = $this->getGrades($request);
+        $data = $this->getGrades($request);
+        $total_credit = 0;
+        $total_point = 0;
+        foreach ($data['courses'] as $course){
+            $total_credit+=$course['credit'];
+            $total_point+=($course['credit']*$course['grade_point']);
+        }
+        $data['avg_grade_point'] = number_format(($total_point/$total_credit),2);
         return view('grade',compact('data'));
     }
 
@@ -76,14 +83,15 @@ class GradeController extends Controller
             if ($tds[3]->getPlainText() == '课程名称') continue;
             $course = array();
             $course['name'] = $tds[3]->getPlainText();
-            $course['credit'] = $tds[6]->getPlainText();
-            $course['grade_point'] = $tds[7]->getPlainText();
-            $course['ordinary_perf'] = $tds[8]->getPlainText();
-            $course['final_perf'] = $tds[10]->getPlainText();
-            $course['grade'] = $tds[12]->getPlainText();
+            $course['credit'] =(float) $tds[6]->getPlainText();
+            $course['grade_point'] = (float) $tds[7]->getPlainText();
+            $course['ordinary_perf'] = (int) $tds[8]->getPlainText();
+            $course['final_perf'] = (int)$tds[10]->getPlainText();
+            $course['grade'] = (int)$tds[12]->getPlainText();
             array_push($courses,$course);
         }
-        $data['courses'] = json_encode($courses,JSON_UNESCAPED_UNICODE);
+//        $data['courses'] = json_encode($courses,JSON_UNESCAPED_UNICODE);
+        $data['courses'] = $courses;
         $data['title'] = $this->html_dom->find('#lbl_bt',0)->getPlainText();
         return $data;
     }
