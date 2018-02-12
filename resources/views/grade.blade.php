@@ -14,27 +14,27 @@
 			<div class="card">
 				<div class="card-header text-center">
 					<h5>{!! $data['title'] !!}</h5>
-					平均绩点：{{avg_grade_point}}
+					平均绩点：@{{avg_grade_point}}
 				</div>
 				<div class="card-body">
 					<div class="card-columns">
 						<div class="card" v-for="course in courses">
-							<div class="card-header">{{course.name}}</div>
+							<div class="card-header">@{{course.name}}</div>
 							<div class="card-body">
-							<!-- <h5 class="card-title">{{course.point}}</h5>
-										<p class="card-text">{{course.credit}}</p> -->
+							<!-- <h5 class="card-title">@{{course.point}}</h5>
+										<p class="card-text">@{{course.credit}}</p> -->
 								<table class="table">
 									<tr>
 										<td colspan="2" class="text-center">成绩：<span class="font-weight-bold">{{course.grade}}</span>
 										</td>
 									</tr>
 									<tr>
-										<td>绩点：{{course.grade_point.toFixed(2)}}</td>
-										<td>学分：{{course.credit.toFixed(2)}}</td>
+										<td>绩点：@{{course.grade_point.toFixed(2)}}</td>
+										<td>学分：@{{course.credit.toFixed(2)}}</td>
 									</tr>
 									<tr>
-										<td>平时成绩：{{course.ordinary_perf}}</td>
-										<td>期末成绩：{{course.final_perf}}</td>
+										<td>平时成绩：@{{course.ordinary_perf}}</td>
+										<td>期末成绩：@{{course.final_perf}}</td>
 									</tr>
 								</table>
 							</div>
