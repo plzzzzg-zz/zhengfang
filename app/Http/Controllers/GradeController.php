@@ -50,11 +50,6 @@ class GradeController extends Controller
         $grade_url = 'http://202.116.160.170/xscjcx.aspx?xh='.$this->student_id."&xm=".$name;
         $xn='';
         $xq='';
-        if ($ddlXQ=='year'){
-            $xn = "%D1%A7%C4%EA%B3%C9%BC%A8";
-        }else{
-            $xq='%D1%A7%C6%DA%B3%C9%BC%A8';
-        }
         $result = $this->post($grade_url,$cookie_file,'');
         $this->html_dom->load($result);
         $viewState = $this->html_dom->find("input[name=__VIEWSTATE]",0)->getAttr("value");
@@ -66,9 +61,14 @@ class GradeController extends Controller
             'hidLanguage'=>'',
             'ddlXQ' => $ddlXQ,
             'ddl_kcxz' => '',
-            'btn_xn'=> $xn,
-            'btn_xq'=>$xq
         );
+        if ($ddlXQ=="year"){
+            $xn = "%D1%A7%C4%EA%B3%C9%BC%A8";
+            $post_data['btn_xn'] = $xn;
+        }else{
+            $xq='%D1%A7%C6%DA%B3%C9%BC%A8';
+            $post_data['btn_xq'] = $xq;
+        }
         $post_data = http_build_query($post_data);
         //取得成绩页面代码
         $html = $this->post($grade_url,$cookie_file,$post_data);
