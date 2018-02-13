@@ -22,7 +22,7 @@
                             {{--<strong>有错误</strong>--}}
                         </div>
                     @endif
-                    <form class="form-horizontal" method="POST" action="{{ url('/grade/login') }}">
+                    <form class="form-horizontal" method="POST" action="{{ url('/grade/loginpost') }}">
                         <input type="text" hidden name="func" value="{{$func}}">
                         {{ csrf_field() }}
                         {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}

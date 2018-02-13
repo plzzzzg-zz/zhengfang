@@ -30,7 +30,7 @@ Auth::routes();
 
 
 Route::get('/grade/login','GradeController@login');
-Route::post('/grade/login','GradeController@login_post');
+Route::post('/grade/loginpost','GradeController@login_post');
 Route::get('/grade/show/{ddlXQ}{ddlXN}','GradeController@showGrades');
 Route::get('/grade/{id?}','GradeController@getGrades');
 
