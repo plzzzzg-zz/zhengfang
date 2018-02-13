@@ -157,6 +157,9 @@
             <li>
                 <a href="{{url('/courses/login')}}">更新课表</a>
             </li>
+            <li>
+                <a href="{{url('/grade/login')}}">更新课表</a>
+            </li>
         </ul>
     </div>
     <!-- /#sidebar-wrapper -->
