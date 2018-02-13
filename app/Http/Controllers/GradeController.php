@@ -203,7 +203,8 @@ class GradeController extends Controller
             //getId
             $this->student_id=$xh;
             if ($func == 'grade'){
-                return $this->showGrades($request,$ddlXQ,$ddlXN);
+//                return $this->showGrades($request,$ddlXQ,$ddlXN);
+                return url("/grade/show/$ddlXQ/$ddlXN");
             }
             //登陆成功重定向
         } else {
