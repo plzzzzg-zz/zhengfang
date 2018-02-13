@@ -97,7 +97,7 @@ class CoursesController extends BaseController
         $this->getCaptcha($request);
         $data = $request->session()->get('_token');
         $captcha = 'captcha/' . $data . ".jpg";
-        $captcha_path = ''.Storage::url($captcha);
+        $captcha_path = asset(Storage::url($captcha));
        // var_dump($captcha_path);
         return view('login', compact('captcha_path'));
     }

@@ -22,8 +22,11 @@ class GradeController extends Controller
      * @param $id
      * 展示成绩
      */
-    function showGrades(Request $request){
-        $data = $this->getGrades($request);
+    function showGrades(Request $request ,$ddlXQ,$ddlXN){
+        $data = $this->getGrades($request,$ddlXQ,$ddlXN);
+        if (sizeof($data['courses'])==0){
+            return redirect()->back()->withInput()->withErrors(['xn' => '没找到想要的噢。']);
+        }
         $total_credit = 0;
         $total_point = 0;
         foreach ($data['courses'] as $course){
@@ -38,33 +41,40 @@ class GradeController extends Controller
     /**
      * 获取正方成绩数据
      */
-    function getGrades(Request $request){
+    function getGrades(Request $request,$ddlXQ,$ddlXN){
         $data = $request->session()->get('_token');
         $name = $this->student_name;
         $cookie_file = storage_path() . '\\app\\public\\cookies\\' . $data . '.cookie';
         $name = mb_convert_encoding($name, "gb2312", "UTF-8");
         $name = urlencode($name);
         $grade_url = 'http://202.116.160.170/xscjcx.aspx?xh='.$this->student_id."&xm=".$name;
-        $xn = "%D1%A7%C4%EA%B3%C9%BC%A8";
-//        $xn ='学年成绩';
+        $xn='';
+        $xq='';
+        if ($ddlXQ=='year'){
+            $xn = "%D1%A7%C4%EA%B3%C9%BC%A8";
+        }else{
+            $xq='%D1%A7%C6%DA%B3%C9%BC%A8';
+        }
         $result = $this->post($grade_url,$cookie_file,'');
         $this->html_dom->load($result);
         $viewState = $this->html_dom->find("input[name=__VIEWSTATE]",0)->getAttr("value");
         $post_data = array(
-            'ddlXN' => '2017-2018',
+            'ddlXN' => $ddlXN,
             '__VIEWSTATE' => $viewState,
             '__EVENTTARGET'=>'',
             '__EVENTARGUMENT'=>'',
             'hidLanguage'=>'',
-            'ddlXQ' => '1',
+            'ddlXQ' => $ddlXQ,
             'ddl_kcxz' => '',
-            'btn_xn'=> $xn
+            'btn_xn'=> $xn,
+            'btn_xq'=>$xq
         );
         $post_data = http_build_query($post_data);
         //取得成绩页面代码
         $html = $this->post($grade_url,$cookie_file,$post_data);
         //获取成绩
         $data = $this->analyzeGrades($html);
+
         return $data;
     }
 
@@ -158,6 +168,8 @@ class GradeController extends Controller
         $cookie_file = storage_path() . '\\app\\public\\cookies\\' . $data . '.cookie';
         $input = $request->all();
         $func = $input['func'];
+        $ddlXQ = $input['ddlXQ'];   //学期
+        $ddlXN = $input['ddlXN'];   //学年
         $url = 'http://202.116.160.170/default2.aspx';
         $captcha = $input['code'];
         $xh = $input['student_id'];
@@ -191,7 +203,7 @@ class GradeController extends Controller
             //getId
             $this->student_id=$xh;
             if ($func == 'grade'){
-                return $this->showGrades($request);
+                return $this->showGrades($request,$ddlXQ,$ddlXN);
             }
             //登陆成功重定向
         } else {

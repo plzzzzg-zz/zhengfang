@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <title>更新课表</title>
+    <title>登陆</title>
 </head>
 <body>
 <div class="container">
@@ -16,6 +16,12 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Login</div>
                 <div class="panel-body">
+                    @if ($errors->has('xn'))
+                        <div class="text-danger text-center col">
+                            <strong>{{ $errors->first('xn') }}</strong>
+                            {{--<strong>有错误</strong>--}}
+                        </div>
+                    @endif
                     <form class="form-horizontal" method="POST" action="{{ url('/grade/login') }}">
                         <input type="text" hidden name="func" value="{{$func}}">
                         {{ csrf_field() }}
@@ -24,7 +30,8 @@
                             <label for="student_id" class="col-md-4 control-label">学号</label>
 
                             <div class="col-md-6">
-                                <input id="student_id" type="student_id" class="form-control" name="student_id" value="{{ old('student_id') }}" required autofocus>
+                                <input id="student_id" type="student_id" class="form-control" name="student_id"
+                                       value="{{ old('student_id') }}" required autofocus>
 
                                 @if ($errors->has('student_id'))
                                     <span class="help-block">
@@ -47,12 +54,35 @@
                                 @endif
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="ddlXN" class="col-md-4 control-label">学年</label>
+                            <div class="col-md-3">
+                                <select class="form-control" id="ddlXN" name="ddlXN">
+                                    <option value="2017-2018" selected>2017-2018</option>
+                                    <option value="2016-2017">2016-2017</option>
+                                    <option value="2015-2016">2015-2016</option>
+                                    <option value="2014-2015">2014-2015</option>
+                                    <option value="2013-2014">2013-2014</option>
+                                </select>
+                            </div>
+                            <label for="ddlXQ" class="col-md-1 control-label">学期</label>
+                            <div class="col-md-2">
+                                <select class="form-control" id="ddlXQ" name="ddlXQ">
+                                    <option value="year" selected>整年</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </div>
+
+                        </div>
                         <div class="form-group{{ $errors->has('code') ? ' has-error' : '' }}">
                             <label for="code" class="col-md-4 control-label">验证码</label>
 
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input style="height: 41px;" id="code" type="code" class="form-control" name="code" required>
+                                    <input style="height: 41px;" id="code" type="code" class="form-control" name="code"
+                                           required>
                                     <span class="input-group-addon"><img src="{{$captcha_path}}"></span>
                                 </div>
                                 @if ($errors->has('code'))
